@@ -12,6 +12,7 @@ from models.triangle import Triangle
 from models.polygon import Polygon
 from models.hull import Hull
 from models.region_tree import RegionTree
+from models.linked_queue import LinkedQueue
 
 __all__ = [
     "Vector",
@@ -26,5 +27,6 @@ __all__ = [
     "Triangle",
     "Polygon",
     "Hull",
-    "RegionTree"
+    "RegionTree",
+    "LinkedQueue"
 ]
