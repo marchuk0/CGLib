@@ -1,4 +1,16 @@
-from models import BinTree, Node, Point
+from enum import Enum
+from models import BinTree, LQNode, Point
+
+
+class VType(Enum):
+    Convex = 1
+    Concave = 2
+    LPivot = 3
+    RPivot = 4
+    ROnLineL = 5
+    ROnLineR = 6
+    LOnLineL = 7
+    LOnLineR = 8
 
 
 class LinkedQueue(BinTree):
@@ -10,26 +22,25 @@ class LinkedQueue(BinTree):
 
     def list_of_nodes(self):
         node_ls = [self.ls_head]
-        node = self.ls_head.data[2]
+        node = self.ls_head.l_right
         while node != self.ls_head:
             node_ls.append(node)
-            node = node.data[2]
+            node = node.l_right
         return node_ls
 
     @staticmethod
     def build_ls(items):
-        node_ls = []
-        for i in range(len(items)):
-            node_ls.append(Node([items[i]]))
+        node_ls = [LQNode(i) for i in items]
         for i in range(len(node_ls)):
-            node_ls[i].data.append(node_ls[i - 1])
-            node_ls[i].data.append(node_ls[(i + 1) % len(node_ls)])
+            node_ls[i].l_left = node_ls[i - 1]
+            node_ls[i].l_right = node_ls[(i + 1) % len(node_ls)]
         return node_ls
 
     @staticmethod
-    def build_tree(node: Node, node_ls):
+    def build_tree(node: LQNode, node_ls):
         mid = (len(node_ls) - 1) // 2
         l_ls, r_ls = node_ls[:mid], node_ls[mid + 1:]
+        node.left, node.right = None, None
         if l_ls:
             node.left = l_ls[(len(l_ls) - 1) // 2]
             LinkedQueue.build_tree(node.left, l_ls)
@@ -37,58 +48,56 @@ class LinkedQueue(BinTree):
             node.right = r_ls[(len(l_ls) - 1) // 2]
             LinkedQueue.build_tree(node.right, r_ls)
 
-    @staticmethod
-    def search_left(node: Node, point):
-        hn = node
-        while True:
-            ln, rn = hn.data[1:]
-            t = LinkedQueue.v_type(point, hn.data[0], ln.data[0], rn.data[0])
-            if t == "ltan" or t == "lonr":
-                return hn
-            if t == "ronr":
-                return rn
-            if t == "conc":
-                hn = hn.left if hn.left else ln
-            else:
-                hn = hn.right if hn.right else rn
-
-    @staticmethod
-    def search_right(node: Node, point):
-        hn = node
-        while True:
-            ln, rn = hn.data[1:]
-            t = LinkedQueue.v_type(point, hn.data[0], ln.data[0], rn.data[0])
-            if t == "rtan" or t == "ronl":
-                return hn
-            if t == "lonl":
-                return ln
-            if t == "conc":
-                hn = hn.right if hn.right else rn
-            else:
-                hn = hn.left if hn.left else ln
-
-    def insert(self, item, l_node: Node, r_node: Node):
-        if Point.direction(l_node.data[0], r_node.data[0], self.root.data[0]) > 0:
-            l_node, r_node = r_node, l_node
-        n_node = Node([item, r_node, l_node])
+    def insert(self, item, l_node: LQNode, r_node: LQNode):
+        n_node = LQNode(item, r_node, l_node)
         n = self.ls_head
         while n != r_node:
             if n == l_node:
                 self.ls_head = l_node
                 break
-            n = n.data[2]
-        l_node.data[1], r_node.data[2] = n_node, n_node
+            n = n.l_right
+        l_node.l_left, r_node.l_right = n_node, n_node
         node_ls = self.list_of_nodes()
         self.root = node_ls[(len(node_ls) - 1) // 2]
         self.build_tree(self.root, node_ls)
 
     @staticmethod
+    def search_left(node: LQNode, point):
+        hn = node
+        while True:
+            ln, rn = hn.l_left, hn.l_right
+            t = LinkedQueue.v_type(point, hn.data, ln.data, rn.data)
+            if t == VType.LPivot or t == VType.LOnLineR:
+                return hn
+            if t == VType.ROnLineR:
+                return rn
+            if t == VType.Concave:
+                hn = hn.left if hn.left else ln
+            else:
+                hn = hn.right if hn.right else rn
+
+    @staticmethod
+    def search_right(node: LQNode, point):
+        hn = node
+        while True:
+            ln, rn = hn.l_left, hn.l_right
+            t = LinkedQueue.v_type(point, hn.data, ln.data, rn.data)
+            if t == VType.RPivot or t == VType.ROnLineL:
+                return hn
+            if t == VType.LOnLineL:
+                return ln
+            if t == VType.Concave:
+                hn = hn.right if hn.right else rn
+            else:
+                hn = hn.left if hn.left else ln
+
+    @staticmethod
     def v_type(ep, hp, lp, rp):
         rp_dir, lp_dir = Point.direction(ep, hp, rp), Point.direction(ep, hp, lp)
         if rp_dir == 0:
-            return "ronr" if lp_dir > 0 else "ronl"
+            return VType.ROnLineR if lp_dir > 0 else VType.ROnLineL
         if lp_dir == 0:
-            return "lonr" if rp_dir > 0 else "lonl"
-        if (lp_dir ^ rp_dir) < 0:
-            return "conc" if rp_dir > 0 else "conv"
-        return "ltan" if rp_dir > 0 else "rtan"
+            return VType.LOnLineR if rp_dir > 0 else VType.LOnLineL
+        if lp_dir < 0:
+            return VType.Concave if rp_dir > 0 else VType.RPivot
+        return VType.LPivot if rp_dir > 0 else VType.Convex

@@ -11,7 +11,7 @@ from models import (
     OrientedGraph,
     OrientedEdge,
     NodeWithParent,
-    RegionTree
+    LinkedQueue
 )
 from collections import OrderedDict
 from algo.stripe_method import stripe
@@ -23,6 +23,7 @@ from algo.loci import Loci
 from algo.chain_method import chain_method
 from algo.dc_closest_points import closest_points
 from algo.region_tree_method import region_tree_method
+from algo.preparata import preparata
 import math
 import copy
 
@@ -548,3 +549,39 @@ class TestAlgorithms(unittest.TestCase):
         self.assertEqual([3, 7], next(ans))
         self.assertEqual(ps, next(ans))
         self.assertEqual(ss, next(ans))
+
+    def test_preparata(self):
+        pts = [Point(7, 4), Point(3, 4), Point(1, 2), Point(11, 6),
+               Point(8, 1), Point(2, 3), Point(4, 8), Point(6, 7)]
+        pre = [Point(1, 2), Point(2, 3), Point(3, 4), Point(4, 8),
+               Point(6, 7), Point(7, 4), Point(8, 1), Point(11, 6)]
+        hulls = [[Point(1, 2), Point(4, 8), Point(3, 4)],
+                 [Point(1, 2), Point(4, 8), Point(6, 7)],
+                 [Point(1, 2), Point(4, 8), Point(6, 7), Point(7, 4)],
+                 [Point(1, 2), Point(4, 8), Point(6, 7), Point(8, 1)],
+                 [Point(1, 2), Point(4, 8), Point(11, 6), Point(8, 1)]]
+        node_lists = [LinkedQueue.build_ls(hull) for hull in hulls[:-1]]
+        trees = []
+        for ls in node_lists:
+            root = ls[(len(ls) - 1) // 2]
+            LinkedQueue.build_tree(root, ls)
+            trees.append(root)
+        pivots = [[trees[0].left, trees[0]],
+                  [trees[1].left, trees[1].right],
+                  [trees[2].left, trees[2].right],
+                  [trees[3].right.right, trees[3]]]
+        ans = preparata(pts)
+        self.assertEqual(pre, next(ans))
+        self.assertEqual(hulls[0], next(ans))
+        self.assertEqual(trees[0], next(ans))
+        self.assertEqual(pivots[0], next(ans))
+        self.assertEqual(hulls[1], next(ans))
+        self.assertEqual(trees[1], next(ans))
+        self.assertEqual(pivots[1], next(ans))
+        self.assertEqual(hulls[2], next(ans))
+        self.assertEqual(trees[2], next(ans))
+        self.assertEqual(pivots[2], next(ans))
+        self.assertEqual(hulls[3], next(ans))
+        self.assertEqual(trees[3], next(ans))
+        self.assertEqual(pivots[3], next(ans))
+        self.assertEqual(hulls[4], next(ans))
