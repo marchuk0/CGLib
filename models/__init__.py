@@ -12,7 +12,8 @@ from models.triangle import Triangle
 from models.polygon import Polygon
 from models.hull import Hull
 from models.region_tree import RegionTree
-from models.linked_queue import LinkedQueue
+from models.linked_queue import LinkedQueue, VType
+from models.dynamic_hull import DynamicHull
 
 __all__ = [
     "Vector",
@@ -29,5 +30,7 @@ __all__ = [
     "Hull",
     "RegionTree",
     "LQNode",
-    "LinkedQueue"
+    "LinkedQueue",
+    "VType",
+    "DynamicHull"
 ]

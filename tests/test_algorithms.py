@@ -24,6 +24,7 @@ from algo.chain_method import chain_method
 from algo.dc_closest_points import closest_points
 from algo.region_tree_method import region_tree_method
 from algo.preparata import preparata
+from algo.dynamic_convex_hull import dynamic_convex_hull
 import math
 import copy
 
@@ -585,3 +586,67 @@ class TestAlgorithms(unittest.TestCase):
         self.assertEqual(trees[3], next(ans))
         self.assertEqual(pivots[3], next(ans))
         self.assertEqual(hulls[4], next(ans))
+
+    def test_dynamic_convex_hull(self):
+        pts = [Point(13, 4.5), Point(2, 5), Point(5, 8), Point(17, 7), Point(6, 2), Point(7, 4),
+               Point(9, 10), Point(11, 6), Point(13, 9), Point(19, 3), Point(3, 1)]
+        pre = [Point(2, 5), Point(3, 1), Point(5, 8), Point(6, 2), Point(7, 4), Point(9, 10),
+               Point(11, 6), Point(13, 4.5), Point(13, 9), Point(17, 7), Point(19, 3)]
+        p = Point(4, 9)
+        nodes = [[Node([Point(2, 5)]), Node([Point(3, 1)]), Node([Point(5, 8)]), Node([Point(6, 2)]),
+                  Node([Point(7, 4)]), Node([Point(9, 10)]), Node([Point(11, 6)]), Node([Point(13, 4.5)]),
+                  Node([Point(13, 9)]), Node([Point(17, 7)]), Node([Point(19, 3)])],
+                 [Node([Point(2, 5), [Point(3, 1)], 1]),
+                  Node([Point(6, 2), [Point(6, 2)], 1]),
+                  Node([Point(11, 6), [Point(11, 6)], 1]),
+                  Node([Point(17, 7), [], 1])],
+                 [Node([Point(5, 8), [], 1]),
+                  Node([Point(9, 10), [Point(13, 4.5)], 1]),
+                  Node([Point(13, 9), [], 1])],
+                 [Node([Point(3, 1), [Point(7, 4)], 1]),
+                  Node([Point(13, 4.5), [], 1])],
+                 [Node([Point(7, 4),
+                        [Point(2, 5), Point(5, 8), Point(9, 10), Point(13, 9), Point(17, 7), Point(19, 3)], 2])]]
+        nodes[1][0].left, nodes[1][0].right = nodes[0][0:2]
+        nodes[1][1].left, nodes[1][1].right = nodes[0][3:5]
+        nodes[1][2].left, nodes[1][2].right = nodes[0][6:8]
+        nodes[1][3].left, nodes[1][3].right = nodes[0][9:]
+        nodes[2][0].left, nodes[2][0].right = nodes[0][2], nodes[1][1]
+        nodes[2][1].left, nodes[2][1].right = nodes[0][5], nodes[1][2]
+        nodes[2][2].left, nodes[2][2].right = nodes[0][8], nodes[1][3]
+        nodes[3][0].left, nodes[3][0].right = nodes[1][0], nodes[2][0]
+        nodes[3][1].left, nodes[3][1].right = nodes[2][1:]
+        nodes[4][0].left, nodes[4][0].right = nodes[3]
+        tree0 = BinTree(nodes[4][0])
+
+        nodes = [[Node([Point(2, 5)]), Node([Point(3, 1)]), Node([Point(4, 9)]), Node([Point(5, 8)]),
+                  Node([Point(6, 2)]), Node([Point(7, 4)]), Node([Point(9, 10)]), Node([Point(11, 6)]),
+                  Node([Point(13, 4.5)]), Node([Point(13, 9)]), Node([Point(17, 7)]), Node([Point(19, 3)])],
+                 [Node([Point(3, 1), [Point(3, 1)], 1]),
+                  Node([Point(6, 2), [Point(6, 2)], 1]),
+                  Node([Point(11, 6), [Point(11, 6)], 1]),
+                  Node([Point(17, 7), [], 1])],
+                 [Node([Point(2, 5), [], 1]),
+                  Node([Point(5, 8), [], 1]),
+                  Node([Point(9, 10), [Point(13, 4.5)], 1]),
+                  Node([Point(13, 9), [], 1])],
+                 [Node([Point(4, 9), [Point(5, 8), Point(7, 4)], 2]),
+                  Node([Point(13, 4.5), [], 1])],
+                 [Node([Point(7, 4),
+                        [Point(2, 5), Point(4, 9), Point(9, 10), Point(13, 9), Point(17, 7), Point(19, 3)], 2])]]
+        nodes[1][0].left, nodes[1][0].right = nodes[0][1:3]
+        nodes[1][1].left, nodes[1][1].right = nodes[0][4:6]
+        nodes[1][2].left, nodes[1][2].right = nodes[0][7:9]
+        nodes[1][3].left, nodes[1][3].right = nodes[0][10:]
+        nodes[2][0].left, nodes[2][0].right = nodes[0][0], nodes[1][0]
+        nodes[2][1].left, nodes[2][1].right = nodes[0][3], nodes[1][1]
+        nodes[2][2].left, nodes[2][2].right = nodes[0][6], nodes[1][2]
+        nodes[2][3].left, nodes[2][3].right = nodes[0][9], nodes[1][3]
+        nodes[3][0].left, nodes[3][0].right = nodes[2][0:2]
+        nodes[3][1].left, nodes[3][1].right = nodes[2][2:]
+        nodes[4][0].left, nodes[4][0].right = nodes[3]
+        tree1 = BinTree(nodes[4][0])
+        ans = dynamic_convex_hull(pts, p)
+        self.assertEqual(pre, next(ans))
+        self.assertEqual(tree0, next(ans))
+        self.assertEqual(tree1, next(ans))

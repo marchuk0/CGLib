@@ -11,6 +11,7 @@ class VType(Enum):
     ROnLineR = 6
     LOnLineL = 7
     LOnLineR = 8
+    BothOnLine = 9
 
 
 class LinkedQueue(BinTree):
