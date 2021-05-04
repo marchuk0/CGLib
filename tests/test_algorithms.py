@@ -11,7 +11,8 @@ from models import (
     OrientedGraph,
     OrientedEdge,
     NodeWithParent,
-    LinkedQueue
+    LinkedQueue,
+    BNode
 )
 from collections import OrderedDict
 from algo.stripe_method import stripe
@@ -592,61 +593,95 @@ class TestAlgorithms(unittest.TestCase):
                Point(9, 10), Point(11, 6), Point(13, 9), Point(19, 3), Point(3, 1)]
         pre = [Point(2, 5), Point(3, 1), Point(5, 8), Point(6, 2), Point(7, 4), Point(9, 10),
                Point(11, 6), Point(13, 4.5), Point(13, 9), Point(17, 7), Point(19, 3)]
-        p = Point(4, 9)
-        nodes = [[Node([Point(2, 5)]), Node([Point(3, 1)]), Node([Point(5, 8)]), Node([Point(6, 2)]),
-                  Node([Point(7, 4)]), Node([Point(9, 10)]), Node([Point(11, 6)]), Node([Point(13, 4.5)]),
-                  Node([Point(13, 9)]), Node([Point(17, 7)]), Node([Point(19, 3)])],
-                 [Node([Point(2, 5), [Point(3, 1)], 1]),
-                  Node([Point(6, 2), [Point(6, 2)], 1]),
-                  Node([Point(11, 6), [Point(11, 6)], 1]),
-                  Node([Point(17, 7), [], 1])],
-                 [Node([Point(5, 8), [], 1]),
-                  Node([Point(9, 10), [Point(13, 4.5)], 1]),
-                  Node([Point(13, 9), [], 1])],
-                 [Node([Point(3, 1), [Point(7, 4)], 1]),
-                  Node([Point(13, 4.5), [], 1])],
-                 [Node([Point(7, 4),
-                        [Point(2, 5), Point(5, 8), Point(9, 10), Point(13, 9), Point(17, 7), Point(19, 3)], 2])]]
-        nodes[1][0].left, nodes[1][0].right = nodes[0][0:2]
-        nodes[1][1].left, nodes[1][1].right = nodes[0][3:5]
-        nodes[1][2].left, nodes[1][2].right = nodes[0][6:8]
-        nodes[1][3].left, nodes[1][3].right = nodes[0][9:]
-        nodes[2][0].left, nodes[2][0].right = nodes[0][2], nodes[1][1]
-        nodes[2][1].left, nodes[2][1].right = nodes[0][5], nodes[1][2]
-        nodes[2][2].left, nodes[2][2].right = nodes[0][8], nodes[1][3]
-        nodes[3][0].left, nodes[3][0].right = nodes[1][0], nodes[2][0]
-        nodes[3][1].left, nodes[3][1].right = nodes[2][1:]
-        nodes[4][0].left, nodes[4][0].right = nodes[3]
-        tree0 = BinTree(nodes[4][0])
+        pti = Point(25, 12)
+        ptr = Point(2, 5)
+        nodes0 = [[BNode([Point(2, 5)]), BNode([Point(3, 1)]), BNode([Point(5, 8)]), BNode([Point(6, 2)]),
+                  BNode([Point(7, 4)]), BNode([Point(9, 10)]), BNode([Point(11, 6)]), BNode([Point(13, 4.5)]),
+                  BNode([Point(13, 9)]), BNode([Point(17, 7)]), BNode([Point(19, 3)])],
+                 [BNode([Point(2, 5), [Point(3, 1)], 1], 2),
+                  BNode([Point(6, 2), [Point(6, 2)], 1], 2),
+                  BNode([Point(11, 6), [Point(11, 6)], 1], 2),
+                  BNode([Point(17, 7), [], 1], 2)],
+                 [BNode([Point(5, 8), [], 1], 3),
+                  BNode([Point(9, 10), [Point(13, 4.5)], 1], 3),
+                  BNode([Point(13, 9), [], 1], 3)],
+                 [BNode([Point(3, 1), [Point(7, 4)], 1], 4),
+                  BNode([Point(13, 4.5), [], 1], 4)],
+                 [BNode([Point(7, 4),
+                        [Point(2, 5), Point(5, 8), Point(9, 10), Point(13, 9), Point(17, 7), Point(19, 3)], 2], 5)]]
+        nodes0[1][0].left, nodes0[1][0].right = nodes0[0][0:2]
+        nodes0[1][1].left, nodes0[1][1].right = nodes0[0][3:5]
+        nodes0[1][2].left, nodes0[1][2].right = nodes0[0][6:8]
+        nodes0[1][3].left, nodes0[1][3].right = nodes0[0][9:]
+        nodes0[2][0].left, nodes0[2][0].right = nodes0[0][2], nodes0[1][1]
+        nodes0[2][1].left, nodes0[2][1].right = nodes0[0][5], nodes0[1][2]
+        nodes0[2][2].left, nodes0[2][2].right = nodes0[0][8], nodes0[1][3]
+        nodes0[3][0].left, nodes0[3][0].right = nodes0[1][0], nodes0[2][0]
+        nodes0[3][1].left, nodes0[3][1].right = nodes0[2][1:]
+        nodes0[4][0].left, nodes0[4][0].right = nodes0[3]
+        root0 = nodes0[4][0]
 
-        nodes = [[Node([Point(2, 5)]), Node([Point(3, 1)]), Node([Point(4, 9)]), Node([Point(5, 8)]),
-                  Node([Point(6, 2)]), Node([Point(7, 4)]), Node([Point(9, 10)]), Node([Point(11, 6)]),
-                  Node([Point(13, 4.5)]), Node([Point(13, 9)]), Node([Point(17, 7)]), Node([Point(19, 3)])],
-                 [Node([Point(3, 1), [Point(3, 1)], 1]),
-                  Node([Point(6, 2), [Point(6, 2)], 1]),
-                  Node([Point(11, 6), [Point(11, 6)], 1]),
-                  Node([Point(17, 7), [], 1])],
-                 [Node([Point(2, 5), [], 1]),
-                  Node([Point(5, 8), [], 1]),
-                  Node([Point(9, 10), [Point(13, 4.5)], 1]),
-                  Node([Point(13, 9), [], 1])],
-                 [Node([Point(4, 9), [Point(5, 8), Point(7, 4)], 2]),
-                  Node([Point(13, 4.5), [], 1])],
-                 [Node([Point(7, 4),
-                        [Point(2, 5), Point(4, 9), Point(9, 10), Point(13, 9), Point(17, 7), Point(19, 3)], 2])]]
-        nodes[1][0].left, nodes[1][0].right = nodes[0][1:3]
-        nodes[1][1].left, nodes[1][1].right = nodes[0][4:6]
-        nodes[1][2].left, nodes[1][2].right = nodes[0][7:9]
-        nodes[1][3].left, nodes[1][3].right = nodes[0][10:]
-        nodes[2][0].left, nodes[2][0].right = nodes[0][0], nodes[1][0]
-        nodes[2][1].left, nodes[2][1].right = nodes[0][3], nodes[1][1]
-        nodes[2][2].left, nodes[2][2].right = nodes[0][6], nodes[1][2]
-        nodes[2][3].left, nodes[2][3].right = nodes[0][9], nodes[1][3]
-        nodes[3][0].left, nodes[3][0].right = nodes[2][0:2]
-        nodes[3][1].left, nodes[3][1].right = nodes[2][2:]
-        nodes[4][0].left, nodes[4][0].right = nodes[3]
-        tree1 = BinTree(nodes[4][0])
-        ans = dynamic_convex_hull(pts, p)
-        self.assertEqual(pre, next(ans))
-        self.assertEqual(tree0, next(ans))
-        self.assertEqual(tree1, next(ans))
+        nodes1 = [[BNode([Point(2, 5)]), BNode([Point(3, 1)]), BNode([Point(5, 8)]), BNode([Point(6, 2)]),
+                  BNode([Point(7, 4)]), BNode([Point(9, 10)]), BNode([Point(11, 6)]), BNode([Point(13, 4.5)]),
+                  BNode([Point(13, 9)]), BNode([Point(17, 7)]), BNode([Point(19, 3)]), BNode([Point(25, 12)])],
+                 [BNode([Point(2, 5), [Point(3, 1)], 1], 2),
+                  BNode([Point(6, 2), [Point(6, 2)], 1], 2),
+                  BNode([Point(11, 6), [Point(11, 6)], 1], 2),
+                  BNode([Point(13, 9), [Point(17, 7)], 1], 2),
+                  BNode([Point(19, 3), [Point(19, 3)], 1], 2)],
+                 [BNode([Point(5, 8), [], 1], 3),
+                  BNode([Point(9, 10), [Point(13, 4.5)], 1], 3),
+                  BNode([Point(17, 7), [Point(13, 9)], 1], 3)],
+                 [BNode([Point(3, 1), [Point(7, 4)], 1], 4),
+                  BNode([Point(13, 4.5), [], 1], 4)],
+                 [BNode([Point(7, 4),
+                         [Point(2, 5), Point(5, 8), Point(9, 10), Point(25, 12)], 2], 5)]]
+        nodes1[1][0].left, nodes1[1][0].right = nodes1[0][0:2]
+        nodes1[1][1].left, nodes1[1][1].right = nodes1[0][3:5]
+        nodes1[1][2].left, nodes1[1][2].right = nodes1[0][6:8]
+        nodes1[1][3].left, nodes1[1][3].right = nodes1[0][8:10]
+        nodes1[1][4].left, nodes1[1][4].right = nodes1[0][10:]
+        nodes1[2][0].left, nodes1[2][0].right = nodes1[0][2], nodes1[1][1]
+        nodes1[2][1].left, nodes1[2][1].right = nodes1[0][5], nodes1[1][2]
+        nodes1[2][2].left, nodes1[2][2].right = nodes1[1][3:]
+        nodes1[3][0].left, nodes1[3][0].right = nodes1[1][0], nodes1[2][0]
+        nodes1[3][1].left, nodes1[3][1].right = nodes1[2][1:]
+        nodes1[4][0].left, nodes1[4][0].right = nodes1[3]
+        root1 = nodes1[4][0]
+
+        ans1 = dynamic_convex_hull(pts, pti, "insert")
+        self.assertEqual(pre, next(ans1))
+        self.assertEqual(root0, next(ans1).root)
+        self.assertEqual(True, next(ans1))
+        self.assertEqual(root1, next(ans1).root)
+
+        nodes2 = [[BNode([Point(3, 1)]), BNode([Point(5, 8)]), BNode([Point(6, 2)]), BNode([Point(7, 4)]),
+                   BNode([Point(9, 10)]), BNode([Point(11, 6)]), BNode([Point(13, 4.5)]),  BNode([Point(13, 9)]),
+                   BNode([Point(17, 7)]), BNode([Point(19, 3)])],
+                  [BNode([Point(3, 1), [], 1], 2),
+                   BNode([Point(6, 2), [Point(6, 2)], 1], 2),
+                   BNode([Point(11, 6), [Point(11, 6)], 1], 2),
+                   BNode([Point(17, 7), [], 1], 2)],
+                  [BNode([Point(5, 8), [Point(7, 4)], 2], 3),
+                   BNode([Point(9, 10), [Point(13, 4.5)], 1], 3),
+                   BNode([Point(13, 9), [], 1], 3)],
+                  [BNode([Point(13, 4.5), [], 1], 4)],
+                  [BNode([Point(7, 4),
+                          [Point(3, 1), Point(5, 8), Point(9, 10), Point(13, 9), Point(17, 7), Point(19, 3)], 2], 5)]]
+        nodes2[1][0].left, nodes2[1][0].right = nodes2[0][0:2]
+        nodes2[1][1].left, nodes2[1][1].right = nodes2[0][2:4]
+        nodes2[1][2].left, nodes2[1][2].right = nodes2[0][5:7]
+        nodes2[1][3].left, nodes2[1][3].right = nodes2[0][8:]
+        nodes2[2][0].left, nodes2[2][0].right = nodes2[1][0:2]
+        nodes2[2][1].left, nodes2[2][1].right = nodes2[0][4], nodes2[1][2]
+        nodes2[2][2].left, nodes2[2][2].right = nodes2[0][7], nodes2[1][3]
+
+        nodes2[3][0].left, nodes2[3][0].right = nodes2[2][1:]
+        nodes2[4][0].left, nodes2[4][0].right = nodes2[2][0], nodes2[3][0]
+        root2 = nodes2[4][0]
+
+        ans2 = dynamic_convex_hull(pts, ptr, "remove")
+        self.assertEqual(pre, next(ans2))
+        self.assertEqual(root0, next(ans2).root)
+        self.assertEqual(True, next(ans2))
+        self.assertEqual(root2, next(ans2).root)

@@ -31,3 +31,6 @@ class BNode(Node):
     def __init__(self, data, height=1):
         self.height = height
         super().__init__(data)
+
+    def __eq__(self, other):
+        return self.height == other.height and super().__eq__(other)
