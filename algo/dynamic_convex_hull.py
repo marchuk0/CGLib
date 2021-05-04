@@ -3,10 +3,11 @@ from models import DynamicHull
 
 def dynamic_convex_hull(points, point, op='add'):
     dh = DynamicHull(points)
-    yield dh.x_ordered
+    yield sorted(points)
     yield dh
     if op == 'add':
-        dh.add(point)
-    if op == 'remove':
-        dh.remove(point)
-    yield dh
+        yield dh.insert(point)
+        yield dh
+    elif op == 'remove':
+        yield dh.remove(point)
+        yield dh

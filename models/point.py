@@ -47,6 +47,18 @@ class Point:
         """Compares point coords."""
         return self.coords < other.coords
 
+    def __gt__(self, other):
+        """Compares point coords."""
+        return self.coords > other.coords
+
+    def __le__(self, other):
+        """Compares point coords."""
+        return self.coords <= other.coords
+
+    def __ge__(self, other):
+        """Compares point coords."""
+        return self.coords >= other.coords
+
     def __add__(self, other):
         """To delete."""
         return Point(*list(map(add, self.coords, other.coords)))

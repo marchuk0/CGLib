@@ -25,3 +25,9 @@ class LQNode(Node):
         self.l_left = l_left
         self.l_right = l_right
         super().__init__(data)
+
+
+class BNode(Node):
+    def __init__(self, data, height=1):
+        self.height = height
+        super().__init__(data)
