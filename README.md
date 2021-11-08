@@ -25,3 +25,4 @@ This module contains implementations for computational geometry algorithms based
 #### Proximity problems
 * *Divide-and-conquer closest pair search **(TBD)***: given a set of points, find the two points with the smallest mutual distance, using divide-and-conquer approach.
 * *Divide-and-conquer Voronoi diagram constructing **(TBD)***: given a set points, construct their Voronoi diagram, using divide-and-conquer approach.
+
