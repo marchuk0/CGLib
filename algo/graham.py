@@ -3,7 +3,13 @@ from models import Point
 
 
 def graham(points):
-    origin = Point.centroid(points)
+    i = 2
+    while Point.direction(points[0], points[1], points[i]) == 0:
+        i += 1
+    
+    origin = Point.centroid([points[0], points[1], points[i]])
+    yield origin
+    
     min_point = min(points, key=lambda p: tuple(reversed(p.coords)))
     ordered = sort_points(points, origin, min_point)
     yield ordered
