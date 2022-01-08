@@ -13,12 +13,13 @@ def graham(points):
     min_point = min(points, key=lambda p: tuple(reversed(p.coords)))
     ordered = sort_points(points, origin, min_point)
     yield ordered
+    yield min_point
 
     ordered.append(min_point)
     steps_table = []
-    ans = make_hull(steps_table, ordered)
+    hull = make_hull(steps_table, ordered)
     yield steps_table
-    yield ans
+    yield hull
 
 
 def sort_points(points, origin, min_point):

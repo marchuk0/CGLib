@@ -185,11 +185,16 @@ class TestAlgorithms(unittest.TestCase):
 
     def test_graham1(self):
         pts = [Point(7, 0), Point(3, 3), Point(0, 0)]
+        origin = Point(3.3333333333333335, 1.0)
         ordered = [Point(0, 0), Point(7, 0), Point(3, 3)]
+        min_point = Point(0, 0)
         steps = [([0, 1, 2], True, 1), ([1, 2, 0], True, 2)]
         hull = [Point(0, 0), Point(7, 0), Point(3, 3)]
         ans = graham(pts)
+        
+        self.assertAlmostEqual(origin, next(ans))
         self.assertEqual(ordered, next(ans))
+        self.assertEqual(min_point, next(ans))
         self.assertEqual(steps, next(ans))
         self.assertEqual(hull, next(ans))
 
@@ -207,33 +212,34 @@ class TestAlgorithms(unittest.TestCase):
             Point(0, 0),
             Point(10, 3),
         ]
+        origin = Point(4.0, 7.666666666666667)
         ordered = [
             Point(0, 0),
+            Point(3, 5),
             Point(3, 3),
             Point(5, 0),
-            Point(10, 3),
             Point(5, 5),
+            Point(10, 3),
             Point(7, 7),
             Point(6, 8),
             Point(4, 8),
             Point(3, 10),
             Point(2, 8),
-            Point(3, 5),
         ]
+        min_point = Point(0, 0)
         steps = [
             ([0, 1, 2], False, 1),
-            ([0, 2, 3], True, 2),
-            ([2, 3, 4], True, 3),
+            ([0, 2, 3], False, 2),
+            ([0, 3, 4], True, 3),
             ([3, 4, 5], False, 4),
-            ([2, 3, 5], True, 3),
+            ([0, 3, 5], True, 3),
             ([3, 5, 6], True, 5),
             ([5, 6, 7], True, 6),
-            ([6, 7, 8], False, 7),
-            ([5, 6, 8], True, 6),
-            ([6, 8, 9], True, 8),
-            ([8, 9, 10], True, 9),
-            ([9, 10, 0], False, 10),
-            ([8, 9, 0], True, 9),
+            ([6, 7, 8], True, 7),
+            ([7, 8, 9], False, 8),
+            ([6, 7, 9], True, 7),
+            ([7, 9, 10], True, 9),
+            ([9, 10, 0], True, 10)
         ]
         hull = [
             Point(0, 0),
@@ -245,7 +251,9 @@ class TestAlgorithms(unittest.TestCase):
             Point(2, 8),
         ]
         ans = graham(pts)
+        self.assertAlmostEqual(origin, next(ans))
         self.assertEqual(ordered, next(ans))
+        self.assertEqual(min_point, next(ans))
         self.assertEqual(steps, next(ans))
         self.assertEqual(hull, next(ans))
 
@@ -262,32 +270,33 @@ class TestAlgorithms(unittest.TestCase):
             Point(1, 3),
             Point(5, 2),
         ]
+        origin = Point(4.666666666666667, 7.333333333333333)
         ordered = [
             Point(5, 2),
+            Point(5, 6),
             Point(8, 2),
             Point(7, 5),
             Point(11, 5),
             Point(10, 7),
-            Point(8, 11),
             Point(7, 8),
+            Point(8, 11),
             Point(2, 8),
-            Point(5, 6),
             Point(1, 3),
         ]
+        min_point = Point(5, 2)
         steps = [
-            ([0, 1, 2], True, 1),
-            ([1, 2, 3], False, 2),
-            ([0, 1, 3], True, 1),
-            ([1, 3, 4], True, 3),
-            ([3, 4, 5], False, 4),
-            ([1, 3, 5], True, 3),
-            ([3, 5, 6], True, 5),
+            ([0, 1, 2], False, 1),
+            ([0, 2, 3], True, 2),
+            ([2, 3, 4], False, 3),
+            ([0, 2, 4], True, 2),
+            ([2, 4, 5], True, 4),
+            ([4, 5, 6], True, 5),
             ([5, 6, 7], False, 6),
-            ([3, 5, 7], True, 5),
-            ([5, 7, 8], True, 7),
-            ([7, 8, 9], False, 8),
-            ([5, 7, 9], True, 7),
-            ([7, 9, 0], True, 9),
+            ([4, 5, 7], False, 5),
+            ([2, 4, 7], True, 4),
+            ([4, 7, 8], True, 7),
+            ([7, 8, 9], True, 8),
+            ([8, 9, 0], True, 9)
         ]
         hull = [
             Point(5, 2),
@@ -298,7 +307,9 @@ class TestAlgorithms(unittest.TestCase):
             Point(1, 3),
         ]
         ans = graham(pts)
+        self.assertAlmostEqual(origin, next(ans))
         self.assertEqual(ordered, next(ans))
+        self.assertEqual(min_point, next(ans))
         self.assertEqual(steps, next(ans))
         self.assertEqual(hull, next(ans))
 

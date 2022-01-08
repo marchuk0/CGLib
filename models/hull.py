@@ -12,7 +12,7 @@ class Hull(Polygon):
             points = list(self) + list(other)
         else:
             points = list(self) + list(other.get_arc(centroid))
-        return list(graham(points))[2]
+        return list(graham(points))[-1]
 
     def reference_points(self, point):
         v = Vector((0, 1))
