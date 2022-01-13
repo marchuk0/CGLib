@@ -185,16 +185,16 @@ class TestAlgorithms(unittest.TestCase):
 
     def test_graham1(self):
         pts = [Point(7, 0), Point(3, 3), Point(0, 0)]
-        origin = Point(3.3333333333333335, 1.0)
+        centroid = Point(3.3333333333333335, 1.0)
         ordered = [Point(0, 0), Point(7, 0), Point(3, 3)]
-        min_point = Point(0, 0)
+        origin = Point(0, 0)
         steps = [([0, 1, 2], True, 1), ([1, 2, 0], True, 2)]
         hull = [Point(0, 0), Point(7, 0), Point(3, 3)]
         ans = graham(pts)
         
-        self.assertAlmostEqual(origin, next(ans))
+        self.assertAlmostEqual(centroid, next(ans))
         self.assertEqual(ordered, next(ans))
-        self.assertEqual(min_point, next(ans))
+        self.assertEqual(origin, next(ans))
         self.assertEqual(steps, next(ans))
         self.assertEqual(hull, next(ans))
 
@@ -212,7 +212,7 @@ class TestAlgorithms(unittest.TestCase):
             Point(0, 0),
             Point(10, 3),
         ]
-        origin = Point(4.0, 7.666666666666667)
+        centroid = Point(4.0, 7.666666666666667)
         ordered = [
             Point(0, 0),
             Point(3, 5),
@@ -226,7 +226,7 @@ class TestAlgorithms(unittest.TestCase):
             Point(3, 10),
             Point(2, 8),
         ]
-        min_point = Point(0, 0)
+        origin = Point(0, 0)
         steps = [
             ([0, 1, 2], False, 1),
             ([0, 2, 3], False, 2),
@@ -251,9 +251,9 @@ class TestAlgorithms(unittest.TestCase):
             Point(2, 8),
         ]
         ans = graham(pts)
-        self.assertAlmostEqual(origin, next(ans))
+        self.assertAlmostEqual(centroid, next(ans))
         self.assertEqual(ordered, next(ans))
-        self.assertEqual(min_point, next(ans))
+        self.assertEqual(origin, next(ans))
         self.assertEqual(steps, next(ans))
         self.assertEqual(hull, next(ans))
 
@@ -270,7 +270,7 @@ class TestAlgorithms(unittest.TestCase):
             Point(1, 3),
             Point(5, 2),
         ]
-        origin = Point(4.666666666666667, 7.333333333333333)
+        centroid = Point(4.666666666666667, 7.333333333333333)
         ordered = [
             Point(5, 2),
             Point(5, 6),
@@ -283,7 +283,7 @@ class TestAlgorithms(unittest.TestCase):
             Point(2, 8),
             Point(1, 3),
         ]
-        min_point = Point(5, 2)
+        origin = Point(5, 2)
         steps = [
             ([0, 1, 2], False, 1),
             ([0, 2, 3], True, 2),
@@ -307,9 +307,9 @@ class TestAlgorithms(unittest.TestCase):
             Point(1, 3),
         ]
         ans = graham(pts)
-        self.assertAlmostEqual(origin, next(ans))
+        self.assertAlmostEqual(centroid, next(ans))
         self.assertEqual(ordered, next(ans))
-        self.assertEqual(min_point, next(ans))
+        self.assertEqual(origin, next(ans))
         self.assertEqual(steps, next(ans))
         self.assertEqual(hull, next(ans))
 
