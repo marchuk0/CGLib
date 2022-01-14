@@ -1,5 +1,5 @@
 from math import pi as pi
-from models import Point
+from CGLib.models.point import Point
 
 
 def graham(points):
@@ -49,5 +49,4 @@ def make_hull(steps_table, ordered):
 
 def current_step(li, ans, add, p):
     """Current step: current points, add/delete, point to add/delete."""
-    point = li.index(ans[-1])
-    return ([li.index(ans[-2]), point, li.index(p)], add, point)
+    return [li.index(ans[-2]), li.index(ans[-1]), li.index(p)], add
