@@ -1,5 +1,5 @@
 from math import pi as pi
-from CGLib.models.point import Point
+from models.point import Point
 
 
 def graham(points):
