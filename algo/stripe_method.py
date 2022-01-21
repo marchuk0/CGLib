@@ -1,4 +1,4 @@
-from CGLib.models import Graph, Point
+from models import Graph, Point
 import functools as f
 
 

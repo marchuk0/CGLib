@@ -1,4 +1,4 @@
-from CGLib.models import Line2D, Node, BinTree, Point
+from models import Line2D, Node, BinTree, Point
 
 
 sort_lr = lambda p: (p.x, -p.y)

@@ -1,5 +1,5 @@
 import unittest
-from CGLib.models import (
+from models import (
     Point,
     Vertex,
     Graph,
@@ -14,21 +14,21 @@ from CGLib.models import (
     RegionTree
 )
 from collections import OrderedDict
-from CGLib.algo.stripe_method import stripe
-from CGLib.algo.kd_tree_method import kd_tree
-from CGLib.algo.jarvis import jarvis
-from CGLib.algo.graham import graham
-from CGLib.algo.quickhull import quickhull
-from CGLib.algo.loci import Loci
-from CGLib.algo.chain_method import chain_method
-from CGLib.algo.dc_closest_points import closest_points
-from CGLib.algo.region_tree_method import region_tree_method
+from algo.stripe_method import stripe
+from algo.kd_tree_method import kd_tree
+from algo.jarvis import jarvis
+from algo.graham import graham
+from algo.quickhull import quickhull
+from algo.loci import Loci
+from algo.chain_method import chain_method
+from algo.dc_closest_points import closest_points
+from algo.region_tree_method import region_tree_method
 import math
 import copy
 
 
 class TestAlgorithms(unittest.TestCase):
-    """CGLib.algorithm tests."""
+    """algorithm tests."""
 
     def test_stripe(self):
         p1 = Vertex(Point(7, 0))
