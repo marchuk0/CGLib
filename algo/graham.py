@@ -18,6 +18,7 @@ def graham(points):
     ordered.append(min_point)
     steps_table = []
     hull = make_hull(steps_table, ordered)
+    ordered.pop()
     yield steps_table
     yield hull
 
