@@ -1,4 +1,5 @@
-from models import Vertex, Edge, OrientedEdge
+from .vertex import Vertex
+from .edge import Edge, OrientedEdge
 
 class Graph:
     edge_class = Edge

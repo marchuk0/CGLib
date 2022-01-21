@@ -1,5 +1,5 @@
 from math import pi as pi
-from models.point import Point
+from CGLib.models.point import Point
 
 
 def graham(points):
@@ -37,16 +37,16 @@ def make_hull(steps_table, ordered):
     ans = ordered[:2]
     for p in ordered[2:]:
         while len(ans) > 1 and Point.direction(ans[-2], ans[-1], p) >= 0:
-            steps_table.append(current_step(ordered, ans, False, p))
+            steps_table.append(current_step(ans, False, p))
             ans.pop()
 
         if len(ans) > 1:
-            steps_table.append(current_step(ordered, ans, True, p))
+            steps_table.append(current_step(ans, True, p))
         ans.append(p)
 
     return ans[:-1]
 
 
-def current_step(li, ans, add, p):
-    """Current step: current points, add/delete, point to add/delete."""
-    return [li.index(ans[-2]), li.index(ans[-1]), li.index(p)], add
+def current_step(ans, add, p):
+    """Current step: current hull, add/delete, point to add/delete."""
+    return [ans[-2], ans[-1], p], add

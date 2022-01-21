@@ -1,4 +1,4 @@
-from models import Point
+from CGLib.models import Point
 from typing import Tuple, List
 from sys import maxsize
 

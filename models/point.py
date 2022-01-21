@@ -1,7 +1,7 @@
 import math
 from operator import add, sub
 from functools import reduce
-from models import Vector
+from .vector import Vector
 
 
 class Point:

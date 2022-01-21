@@ -1,4 +1,5 @@
-from models import Node, Point, NodeWithParent
+from .bin_tree_node import Node, NodeWithParent
+from .point import Point
 
 
 class BinTree:

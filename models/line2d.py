@@ -1,4 +1,4 @@
-from models import Point
+from .point import Point
 
 
 class Line2D:

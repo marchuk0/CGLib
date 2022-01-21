@@ -1,5 +1,5 @@
 import unittest
-from models import (
+from CGLib.models import (
     Point,
     Vertex,
     Graph,
@@ -14,21 +14,21 @@ from models import (
     RegionTree
 )
 from collections import OrderedDict
-from algo.stripe_method import stripe
-from algo.kd_tree_method import kd_tree
-from algo.jarvis import jarvis
-from algo.graham import graham
-from algo.quickhull import quickhull
-from algo.loci import Loci
-from algo.chain_method import chain_method
-from algo.dc_closest_points import closest_points
-from algo.region_tree_method import region_tree_method
+from CGLib.algo.stripe_method import stripe
+from CGLib.algo.kd_tree_method import kd_tree
+from CGLib.algo.jarvis import jarvis
+from CGLib.algo.graham import graham
+from CGLib.algo.quickhull import quickhull
+from CGLib.algo.loci import Loci
+from CGLib.algo.chain_method import chain_method
+from CGLib.algo.dc_closest_points import closest_points
+from CGLib.algo.region_tree_method import region_tree_method
 import math
 import copy
 
 
 class TestAlgorithms(unittest.TestCase):
-    """Algorithm tests."""
+    """CGLib.algorithm tests."""
 
     def test_stripe(self):
         p1 = Vertex(Point(7, 0))
@@ -188,7 +188,10 @@ class TestAlgorithms(unittest.TestCase):
         centroid = Point(3.3333333333333335, 1.0)
         ordered = [Point(0, 0), Point(7, 0), Point(3, 3)]
         origin = Point(0, 0)
-        steps = [([0, 1, 2], True, 1), ([1, 2, 0], True, 2)]
+        steps = [
+            ([ordered[0], ordered[1], ordered[2]], True),
+            ([ordered[1], ordered[2], ordered[0]], True)
+        ]
         hull = [Point(0, 0), Point(7, 0), Point(3, 3)]
         ans = graham(pts)
         
@@ -228,18 +231,18 @@ class TestAlgorithms(unittest.TestCase):
         ]
         origin = Point(0, 0)
         steps = [
-            ([0, 1, 2], False, 1),
-            ([0, 2, 3], False, 2),
-            ([0, 3, 4], True, 3),
-            ([3, 4, 5], False, 4),
-            ([0, 3, 5], True, 3),
-            ([3, 5, 6], True, 5),
-            ([5, 6, 7], True, 6),
-            ([6, 7, 8], True, 7),
-            ([7, 8, 9], False, 8),
-            ([6, 7, 9], True, 7),
-            ([7, 9, 10], True, 9),
-            ([9, 10, 0], True, 10)
+            ([ordered[0], ordered[1], ordered[2]], False),
+            ([ordered[0], ordered[2], ordered[3]], False),
+            ([ordered[0], ordered[3], ordered[4]], True),
+            ([ordered[3], ordered[4], ordered[5]], False),
+            ([ordered[0], ordered[3], ordered[5]], True),
+            ([ordered[3], ordered[5], ordered[6]], True),
+            ([ordered[5], ordered[6], ordered[7]], True),
+            ([ordered[6], ordered[7], ordered[8]], True),
+            ([ordered[7], ordered[8], ordered[9]], False),
+            ([ordered[6], ordered[7], ordered[9]], True),
+            ([ordered[7], ordered[9], ordered[10]], True),
+            ([ordered[9], ordered[10], ordered[0]], True)
         ]
         hull = [
             Point(0, 0),
@@ -285,18 +288,18 @@ class TestAlgorithms(unittest.TestCase):
         ]
         origin = Point(5, 2)
         steps = [
-            ([0, 1, 2], False, 1),
-            ([0, 2, 3], True, 2),
-            ([2, 3, 4], False, 3),
-            ([0, 2, 4], True, 2),
-            ([2, 4, 5], True, 4),
-            ([4, 5, 6], True, 5),
-            ([5, 6, 7], False, 6),
-            ([4, 5, 7], False, 5),
-            ([2, 4, 7], True, 4),
-            ([4, 7, 8], True, 7),
-            ([7, 8, 9], True, 8),
-            ([8, 9, 0], True, 9)
+            ([ordered[0], ordered[1], ordered[2]], False),
+            ([ordered[0], ordered[2], ordered[3]], True),
+            ([ordered[2], ordered[3], ordered[4]], False),
+            ([ordered[0], ordered[2], ordered[4]], True),
+            ([ordered[2], ordered[4], ordered[5]], True),
+            ([ordered[4], ordered[5], ordered[6]], True),
+            ([ordered[5], ordered[6], ordered[7]], False),
+            ([ordered[4], ordered[5], ordered[7]], False),
+            ([ordered[2], ordered[4], ordered[7]], True),
+            ([ordered[4], ordered[7], ordered[8]], True),
+            ([ordered[7], ordered[8], ordered[9]], True),
+            ([ordered[8], ordered[9], ordered[0]], True)
         ]
         hull = [
             Point(5, 2),
