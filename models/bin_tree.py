@@ -5,28 +5,10 @@ from .point import Point
 class BinTree:
     def __init__(self, root: Node):
         self.root = root
+        self.nodes = []
 
     def __eq__(self, other):
         return self.root == other.root
-    
-    @property
-    def level_list(self):
-        return self._level_list(self.root)
-
-    def _level_list(self, node: Node, result=None, depth=0, width=0):
-        if result is None:
-            result = []
-
-        if width == 0:
-            result.append([None for _ in range (2**depth)])
-
-        result[depth][width] = node
-
-        if node and (node.left or node.right):
-            self._level_list(node.left, result, depth+1, width*2)
-            self._level_list(node.right, result, depth+1, width*2+1)
-
-        return result
 
 
 class KdTree(BinTree):
@@ -35,18 +17,24 @@ class KdTree(BinTree):
         self.x_range = x_range
         self.y_range = y_range
         self.partition = []
+        self.search_list = []
 
     def make_tree(self, points, node: Node, vertical=True):
         med = len(points) // 2
+        part = (points[med], vertical)
+        
+        if all(p[0] != part[0] for p in self.partition):
+            self.partition.append(part)
+
         if med == 0:
             return
+
+        self.nodes.append(node)
 
         if vertical:
             sort_key = lambda p: p.y
         else:
             sort_key = lambda p: p.x
-
-        self.partition.append((points[med], vertical))
         
         list_l = sorted(points[:med], key=sort_key)
         list_r = sorted(points[-med:], key=sort_key)
@@ -65,13 +53,22 @@ class KdTree(BinTree):
         else:
             left, right, coord = self.y_range[0], self.y_range[1], node.data.y
 
+
         dots = []
-        if self.dot_in_region(node.data):
+        to_add = self.dot_in_region(node.data)
+
+        if to_add:
             dots.append(node.data)
 
-        if node.left and left < coord:
+        more_than_left = left < coord
+        less_than_right = coord < right
+        intersection = more_than_left and less_than_right
+        
+        self.search_list.append((node.data, to_add, intersection))
+
+        if node.left and more_than_left:
             dots.extend(self.region_search(node.left, not vertical))
-        if node.right and coord < right:
+        if node.right and less_than_right:
             dots.extend(self.region_search(node.right, not vertical))
 
         return dots

@@ -8,6 +8,9 @@ def kd_tree(points, x_range, y_range):
     root = Node(ordered[len(ordered) // 2])
     tree = KdTree(root, x_range, y_range)
     tree.make_tree(ordered, root)
+    yield tree.partition
     yield tree
 
-    yield tree.region_search(root, vertical=True)
+    result = tree.region_search(root, vertical=True)
+    yield tree.search_list
+    yield result

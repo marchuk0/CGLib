@@ -169,7 +169,35 @@ class TestAlgorithms(unittest.TestCase):
         tree.root.right.right = Node(Point(17, 10))
         tree.root.right.right.left = Node(Point(14, 11))
 
-        r_pts = [
+        partition = [
+            (Point(8, 13), True),
+            (Point(3, 6), False),
+            (Point(6, 1), True),
+            (Point(2, 3), False),
+            (Point(5, 8), True),
+            (Point(0, 9), False),
+            (Point(15, 5), False),
+            (Point(12, 4), True),
+            (Point(10, 2), False),
+            (Point(17, 10), True),
+            (Point(14, 11), False)
+        ]
+
+        search_list = [
+            (Point(8, 13), False, True),
+            (Point(3, 6), True, True),
+            (Point(6, 1), True, True),
+            (Point(2, 3), False, True),
+            (Point(5, 8), True, True),
+            (Point(0, 9), False, False),
+            (Point(15, 5), False, True),
+            (Point(12, 4), True, True),
+            (Point(10, 2), True, True),
+            (Point(17, 10), False, False),
+            (Point(14, 11), False, False)
+        ]
+
+        result = [
             Point(3, 6),
             Point(5, 8),
             Point(6, 1),
@@ -180,8 +208,10 @@ class TestAlgorithms(unittest.TestCase):
         ans = kd_tree(pts, rx, ry)
 
         self.assertEqual(sorted(pts), next(ans))
+        self.assertEqual(partition, next(ans))
         self.assertEqual(tree, next(ans))
-        self.assertEqual(r_pts, sorted(next(ans)))
+        self.assertEqual(search_list, next(ans))
+        self.assertEqual(result, sorted(next(ans)))
 
     def test_graham1(self):
         pts = [Point(7, 0), Point(3, 3), Point(0, 0)]
