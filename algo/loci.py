@@ -1,4 +1,4 @@
-from CGLib.models import Point
+from models import Point
 
 
 class Loci:

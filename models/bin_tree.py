@@ -8,26 +8,7 @@ class BinTree:
 
     def __eq__(self, other):
         return self.root == other.root
-    
-    @property
-    def level_list(self):
-        return self._level_list(self.root)
 
-    def _level_list(self, node: Node, result=None, depth=0, width=0):
-        if result is None:
-            result = []
-        
-        if width == 0:
-            result.append([None for _ in range (2**depth)])
-        
-        result[depth][width] = node
-
-        if node and (node.left or node.right):
-            self._level_list(node.left, result, depth+1, width*2)
-            self._level_list(node.right, result, depth+1, width*2+1)
-
-        return result
-        
 
 class KdTree(BinTree):
     def __init__(self, root: Node, x_range, y_range):

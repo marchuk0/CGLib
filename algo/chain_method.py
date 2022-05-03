@@ -1,5 +1,5 @@
 from math import pi as pi
-from CGLib.models import Point, NodeWithParent, ChainsBinTree, OrientedGraph
+from models import Point, NodeWithParent, ChainsBinTree, OrientedGraph
 from collections import OrderedDict
 
 
