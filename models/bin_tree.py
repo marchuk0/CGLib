@@ -34,6 +34,7 @@ class KdTree(BinTree):
         super().__init__(root)
         self.x_range = x_range
         self.y_range = y_range
+        self.partition = []
 
     def make_tree(self, points, node: Node, vertical=True):
         med = len(points) // 2
@@ -45,6 +46,8 @@ class KdTree(BinTree):
         else:
             sort_key = lambda p: p.x
 
+        self.partition.append((points[med], vertical))
+        
         list_l = sorted(points[:med], key=sort_key)
         list_r = sorted(points[-med:], key=sort_key)
         left, right = list_l[med // 2], list_r[med // 2]
