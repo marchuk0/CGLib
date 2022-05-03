@@ -1,4 +1,4 @@
-from models import Graph, Point, Triangle
+from CGLib.models import Graph, Point, Triangle
 
 
 class Kirkpatrick:

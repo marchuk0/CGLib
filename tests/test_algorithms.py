@@ -1,5 +1,5 @@
 import unittest
-from models import (
+from CGLib.models import (
     Point,
     Vertex,
     Graph,
@@ -14,15 +14,15 @@ from models import (
     RegionTree
 )
 from collections import OrderedDict
-from algo.stripe_method import stripe
-from algo.kd_tree_method import kd_tree
-from algo.jarvis import jarvis
-from algo.graham import graham
-from algo.quickhull import quickhull
-from algo.loci import Loci
-from algo.chain_method import chain_method
-from algo.dc_closest_points import closest_points
-from algo.region_tree_method import region_tree_method
+from CGLib.algo.stripe_method import stripe
+from CGLib.algo.kd_tree_method import kd_tree
+from CGLib.algo.jarvis import jarvis
+from CGLib.algo.graham import graham
+from CGLib.algo.quickhull import quickhull
+from CGLib.algo.loci import Loci
+from CGLib.algo.chain_method import chain_method
+from CGLib.algo.dc_closest_points import closest_points
+from CGLib.algo.region_tree_method import region_tree_method
 import math
 import copy
 
@@ -255,7 +255,9 @@ class TestAlgorithms(unittest.TestCase):
         ]
         ans = graham(pts)
         self.assertAlmostEqual(centroid, next(ans))
-        self.assertEqual(ordered, next(ans))
+        o = next(ans)
+        print(o)
+        self.assertEqual(ordered, o)
         self.assertEqual(origin, next(ans))
         self.assertEqual(steps, next(ans))
         self.assertEqual(hull, next(ans))
