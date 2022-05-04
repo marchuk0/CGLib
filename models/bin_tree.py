@@ -25,11 +25,10 @@ class KdTree(BinTree):
         
         if all(p[0] != part[0] for p in self.partition):
             self.partition.append(part)
+            self.nodes.append(node.data)
 
         if med == 0:
             return
-
-        self.nodes.append(node)
 
         if vertical:
             sort_key = lambda p: p.y
@@ -53,22 +52,18 @@ class KdTree(BinTree):
         else:
             left, right, coord = self.y_range[0], self.y_range[1], node.data.y
 
-
         dots = []
         to_add = self.dot_in_region(node.data)
 
         if to_add:
             dots.append(node.data)
 
-        more_than_left = left < coord
-        less_than_right = coord < right
-        intersection = more_than_left and less_than_right
-        
+        intersection = left <= coord <= right        
         self.search_list.append((node.data, to_add, intersection))
 
-        if node.left and more_than_left:
+        if node.left and left < coord:
             dots.extend(self.region_search(node.left, not vertical))
-        if node.right and less_than_right:
+        if node.right and coord < right:
             dots.extend(self.region_search(node.right, not vertical))
 
         return dots
