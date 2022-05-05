@@ -152,10 +152,26 @@ class TestAlgorithms(unittest.TestCase):
             Point(12, 4),
             Point(14, 11),
             Point(15, 5),
-            Point(17, 10),
+            Point(17, 10)
         ]
         rx = [3, 14]
         ry = [0, 8]
+
+        ordered_x = pts
+        ordered_y = [
+            Point(6, 1),
+            Point(10, 2),
+            Point(2, 3),
+            Point(12, 4),
+            Point(15, 5),
+            Point(3, 6),
+            Point(5, 8),
+            Point(0, 9),
+            Point(17, 10),
+            Point(14, 11),
+            Point(8, 13)
+        ]
+
         tree = KdTree(Node(Point(8, 13)), [], [])
         tree.root.left = Node(Point(3, 6))
         tree.root.left.left = Node(Point(6, 1))
@@ -207,7 +223,7 @@ class TestAlgorithms(unittest.TestCase):
 
         ans = kd_tree(pts, rx, ry)
 
-        self.assertEqual(sorted(pts), next(ans))
+        self.assertEqual((ordered_x, ordered_y), next(ans))
         self.assertEqual(partition, next(ans))
         self.assertEqual(tree, next(ans))
         self.assertEqual(search_list, next(ans))
