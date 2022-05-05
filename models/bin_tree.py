@@ -5,10 +5,33 @@ from .point import Point
 class BinTree:
     def __init__(self, root: Node):
         self.root = root
-        self.nodes = []
 
     def __eq__(self, other):
         return self.root == other.root
+    
+    @property
+    def nodes(self):
+        """
+            Returns the tree represented as left-to-right list of tuples
+            with nodes' data, and the data of their left and right children.
+        """
+        return self._nodes(self.root)
+    
+    def _nodes(self, node, result=None):
+        if result is None:
+            result = []
+        
+        left_data = node.left.data if node.left else None
+        right_data = node.right.data if node.right else None
+
+        if node:
+            result.append((node.data, left_data, right_data))
+        if node.left:
+            self._nodes(node.left, result)
+        if node.right:
+            self._nodes(node.right, result)
+        
+        return result
 
 
 class KdTree(BinTree):
@@ -25,7 +48,6 @@ class KdTree(BinTree):
         
         if all(p[0] != part[0] for p in self.partition):
             self.partition.append(part)
-            self.nodes.append(node.data)
 
         if med == 0:
             return
