@@ -1,5 +1,5 @@
 from math import pi as pi
-from models.point import Point
+from CGLib.models.point import Point
 
 
 def graham(points):
@@ -7,15 +7,15 @@ def graham(points):
     while Point.direction(points[0], points[1], points[i]) == 0:
         i += 1
     
-    origin = Point.centroid([points[0], points[1], points[i]])
-    yield origin
+    centroid = Point.centroid([points[0], points[1], points[i]])
+    yield centroid
     
-    min_point = min(points, key=lambda p: tuple(reversed(p.coords)))
-    ordered = sort_points(points, origin, min_point)
+    origin = min(points, key=lambda p: (p.y, -p.x))
+    ordered = sort_points(points, centroid, origin)
     yield ordered
-    yield min_point
+    yield origin
 
-    ordered.append(min_point)
+    ordered.append(origin)
     steps_table = []
     hull = make_hull(steps_table, ordered)
     ordered.pop()
@@ -23,13 +23,13 @@ def graham(points):
     yield hull
 
 
-def sort_points(points, origin, min_point):
-    min_angle = min_point.polar_angle_with(origin)
+def sort_points(points, centroid, origin):
+    min_angle = origin.polar_angle_with(centroid)
 
     def angle_and_dist(p):
-        p_angle = p.polar_angle_with(origin)
+        p_angle = p.polar_angle_with(centroid)
         angle = p_angle if p_angle >= min_angle else 2 * pi + p_angle
-        return (angle, p.dist_to_point(origin))
+        return (angle, p.dist_to_point(centroid))
 
     return sorted(points, key=angle_and_dist)
 
@@ -49,5 +49,5 @@ def make_hull(steps_table, ordered):
 
 
 def current_step(ans, add, p):
-    """Current step: current hull, add/delete, point to add/delete."""
+    """Current step: current points' triple, add/delete, point to add/delete."""
     return [ans[-2], ans[-1], p], add
