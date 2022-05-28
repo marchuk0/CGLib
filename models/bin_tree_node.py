@@ -1,3 +1,6 @@
+from CGLib.models.point import Point
+
+
 class Node:
     def __init__(self, data):
         """By default Node has no children."""
@@ -20,8 +23,13 @@ class NodeWithParent(Node):
         super().__init__(data)
 
 
-class QuickhullNode(Node):
-    def __init__(self, data, h=None, hull_piece=None):
+class QuickhullData:
+    def __init__(self, points, h, hull_piece):
+        self.points = points
         self.h = h
         self.hull_piece = hull_piece
-        super().__init__(data)
+
+
+class QuickhullNode(Node):
+    def __init__(self, points, h=None, hull_piece=None):
+        super().__init__(QuickhullData(points, h, hull_piece))

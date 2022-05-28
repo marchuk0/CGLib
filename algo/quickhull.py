@@ -19,7 +19,7 @@ def quickhull(points):
         partition(s1, lp, rp, tree.root.left) +
         partition(s2, rp, lp, tree.root.right)[1:-1]
     )
-    tree.root.hull_piece = hull
+    tree.root.data.hull_piece = hull
 
     yield lp, rp, s1, s2, tree
     yield tree
@@ -28,8 +28,8 @@ def quickhull(points):
 
 def partition(points, left, right, node):
     if len(points) == 2:
-        node.hull_piece = [left, right]
-        return node.hull_piece
+        node.data.hull_piece = [left, right]
+        return node.data.hull_piece
 
     lr = Line2D(left, right)
     pts = filter(lambda x: x != left and x != right, points)
@@ -38,10 +38,10 @@ def partition(points, left, right, node):
     s1 = left_points(points, left, h)
     s2 = left_points(points, h, right)
 
-    node.h, node.left, node.right = h, QuickhullNode(s1), QuickhullNode(s2)
-    node.hull_piece = partition(s1, left, h, node.left) + partition(s2, h, right, node.right)[1:]
+    node.data.h, node.left, node.right = h, QuickhullNode(s1), QuickhullNode(s2)
+    node.data.hull_piece = partition(s1, left, h, node.left) + partition(s2, h, right, node.right)[1:]
     
-    return node.hull_piece
+    return node.data.hull_piece
 
 
 def make_subset(points, left, right, sort_key):
