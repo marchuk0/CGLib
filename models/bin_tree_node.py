@@ -21,7 +21,7 @@ class NodeWithParent(Node):
 
 
 class QuickhullNode(Node):
-    def __init__(self, data):
-        self.h = None
-        self.hull_piece = None
+    def __init__(self, data, h=None, hull_piece=None):
+        self.h = h
+        self.hull_piece = hull_piece
         super().__init__(data)
