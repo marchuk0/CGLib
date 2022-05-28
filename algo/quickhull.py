@@ -12,8 +12,6 @@ def quickhull(points):
     s1 = make_subset(points, lp, rp, sort_key=sort_lr)
     s2 = make_subset(points, rp, lp, sort_key=sort_rl)
 
-    yield lp, rp, s1, s2
-
     tree = BinTree(QuickhullNode(s1 + s2[1:-1]))
     tree.root.left, tree.root.right = QuickhullNode(s1), QuickhullNode(s2)
 
@@ -23,6 +21,7 @@ def quickhull(points):
     )
     tree.root.hull_piece = hull
 
+    yield lp, rp, s1, s2, tree
     yield tree
     yield hull
 

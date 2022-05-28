@@ -373,6 +373,7 @@ class TestAlgorithms(unittest.TestCase):
         hull = [pts[1], pts[0], pts[2]]
 
         ans = quickhull(pts)
+        _ = next(ans)
         self.assertEqual(tree, next(ans))
         self.assertEqual(hull, next(ans))
 
@@ -428,6 +429,7 @@ class TestAlgorithms(unittest.TestCase):
         hull = [pts[0], pts[10], pts[3], pts[8], pts[7], pts[5]]
 
         ans = quickhull(pts)
+        _ = next(ans)
         self.assertEqual(tree, next(ans))
         self.assertEqual(hull, next(ans))
 
