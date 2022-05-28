@@ -1,4 +1,4 @@
-from models import Line2D, Node, BinTree, Point
+from CGLib.models import Line2D, QuickhullNode, BinTree, Point
 
 
 sort_lr = lambda p: (p.x, -p.y)
@@ -9,34 +9,40 @@ def quickhull(points):
     lp = min(points, key=lambda p: p.coords)
     rp = max(points, key=lambda p: p.coords)
 
-    s1 = sorted(left_points(points, lp, rp), key=sort_lr)
-    s2 = sorted(left_points(points, rp, lp), key=sort_rl)
+    s1 = make_subset(points, lp, rp, sort_key=sort_lr)
+    s2 = make_subset(points, rp, lp, sort_key=sort_rl)
 
-    tree = BinTree(Node(s1 + s2[1:-1]))
-    tree.root.left, tree.root.right = Node(s1), Node(s2)
+    yield lp, rp, s1, s2
 
-    ans = (
-        partition(s1, lp, rp, tree.root.left)
-        + partition(s2, rp, lp, tree.root.right)[1:-1]
+    tree = BinTree(QuickhullNode(s1 + s2[1:-1]))
+    tree.root.left, tree.root.right = QuickhullNode(s1), QuickhullNode(s2)
+
+    hull = (
+        partition(s1, lp, rp, tree.root.left) +
+        partition(s2, rp, lp, tree.root.right)[1:-1]
     )
+    tree.root.hull_piece = hull
 
     yield tree
-    yield ans
+    yield hull
 
 
 def partition(points, left, right, node):
     if len(points) == 2:
-        return [left, right]
+        node.hull_piece = [left, right]
+        return node.hull_piece
 
     lr = Line2D(left, right)
     pts = filter(lambda x: x != left and x != right, points)
-    h = max(pts, key=lambda p: (p.dist_to_line(lr), p.angle_with(left, right)))
 
+    h = max(pts, key=lambda p: (p.dist_to_line(lr), p.angle_with(left, right)))
     s1 = left_points(points, left, h)
     s2 = left_points(points, h, right)
-    node.left, node.right = Node(s1), Node(s2)
 
-    return partition(s1, left, h, node.left) + partition(s2, h, right, node.right)[1:]
+    node.h, node.left, node.right = h, QuickhullNode(s1), QuickhullNode(s2)
+    node.hull_piece = partition(s1, left, h, node.left) + partition(s2, h, right, node.right)[1:]
+    
+    return node.hull_piece
 
 
 def make_subset(points, left, right, sort_key):
@@ -44,9 +50,9 @@ def make_subset(points, left, right, sort_key):
 
 
 def left_points(points, p1, p2):
-    '''Points at the left of vector p1->p2 and p1, p2'''
+    """Points at the left of vector p1->p2 and p1, p2"""
     return (
         [p1] +
-        list(filter(lambda p: Point.direction(p1, p2, p) < 0, points)) +
+        [p for p in points if Point.direction(p1, p2, p) < 0] +
         [p2]
     )

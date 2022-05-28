@@ -5,7 +5,7 @@ from .point import Point
 from .vertex import Vertex
 from .edge import Edge, OrientedEdge
 from .graph import Graph, OrientedGraph
-from .bin_tree_node import Node, NodeWithParent
+from .bin_tree_node import Node, NodeWithParent, QuickhullNode
 from .bin_tree import BinTree, KdTree, ChainsBinTree
 from .line2d import Line2D
 from .triangle import Triangle
@@ -20,6 +20,8 @@ __all__ = [
     "Edge",
     "Graph",
     "Node",
+    "NodeWithParent",
+    "QuickhullNode"
     "BinTree",
     "KdTree",
     "Line2D",

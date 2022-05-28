@@ -13,7 +13,15 @@ class Node:
             and self.right == other.right
         )
 
+
 class NodeWithParent(Node):
     def __init__(self, data, parent = None):
         self.parent = parent
+        super().__init__(data)
+
+
+class QuickhullNode(Node):
+    def __init__(self, data):
+        self.h = None
+        self.hull_piece = None
         super().__init__(data)

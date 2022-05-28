@@ -8,6 +8,7 @@ from models import (
     ChainsBinTree,
     KdTree,
     Node,
+    QuickhullNode,
     OrientedGraph,
     OrientedEdge,
     NodeWithParent,
@@ -364,11 +365,11 @@ class TestAlgorithms(unittest.TestCase):
 
     def test_quickhull1(self):
         pts = [Point(3, 4), Point(0, 0), Point(7, 2)]
-        tree = BinTree(Node([pts[1], pts[0], pts[2]]))
-        tree.root.left = Node([pts[1], pts[0], pts[2]])
-        tree.root.right = Node([pts[2], pts[1]])
-        tree.root.left.left = Node([pts[1], pts[0]])
-        tree.root.left.right = Node([pts[0], pts[2]])
+        tree = BinTree(QuickhullNode([pts[1], pts[0], pts[2]]))
+        tree.root.left = QuickhullNode([pts[1], pts[0], pts[2]])
+        tree.root.right = QuickhullNode([pts[2], pts[1]])
+        tree.root.left.left = QuickhullNode([pts[1], pts[0]])
+        tree.root.left.right = QuickhullNode([pts[0], pts[2]])
         hull = [pts[1], pts[0], pts[2]]
 
         ans = quickhull(pts)
@@ -409,20 +410,20 @@ class TestAlgorithms(unittest.TestCase):
             )
         )
 
-        tree.root.left = Node([pts[0], pts[10], pts[9], pts[3], pts[1], pts[8]])
-        tree.root.right = Node(
+        tree.root.left = QuickhullNode([pts[0], pts[10], pts[9], pts[3], pts[1], pts[8]])
+        tree.root.right = QuickhullNode(
             [pts[8], pts[7], pts[2], pts[4], pts[6], pts[5], pts[11], pts[0]]
         )
 
-        tree.root.left.left = Node([pts[0], pts[10], pts[3]])
-        tree.root.left.right = Node([pts[3], pts[8]])
-        tree.root.left.left.left = Node([pts[0], pts[10]])
-        tree.root.left.left.right = Node([pts[10], pts[3]])
+        tree.root.left.left = QuickhullNode([pts[0], pts[10], pts[3]])
+        tree.root.left.right = QuickhullNode([pts[3], pts[8]])
+        tree.root.left.left.left = QuickhullNode([pts[0], pts[10]])
+        tree.root.left.left.right = QuickhullNode([pts[10], pts[3]])
 
-        tree.root.right.left = Node([pts[8], pts[7]])
-        tree.root.right.right = Node([pts[7], pts[4], pts[6], pts[5], pts[11], pts[0]])
-        tree.root.right.right.left = Node([pts[7], pts[5]])
-        tree.root.right.right.right = Node([pts[5], pts[0]])
+        tree.root.right.left = QuickhullNode([pts[8], pts[7]])
+        tree.root.right.right = QuickhullNode([pts[7], pts[4], pts[6], pts[5], pts[11], pts[0]])
+        tree.root.right.right.left = QuickhullNode([pts[7], pts[5]])
+        tree.root.right.right.right = QuickhullNode([pts[5], pts[0]])
 
         hull = [pts[0], pts[10], pts[3], pts[8], pts[7], pts[5]]
 
