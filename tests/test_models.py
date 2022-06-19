@@ -1,12 +1,13 @@
 import unittest
 import math
-from models.point import Point
-from models.vertex import Vertex
-from models.graph import Graph
-from models.vector import Vector
-from models.triangle import Triangle
-from models.polygon import Polygon
-from models.hull import Hull
+from ..models.point import Point
+from ..models.vertex import Vertex
+from ..models.graph import Graph
+from ..models.vector import Vector
+from ..models.triangle import Triangle
+from ..models.polygon import Polygon
+from ..models.hull import Hull
+
 
 class TestModels(unittest.TestCase):
     """Test class for basic entities."""

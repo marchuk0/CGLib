@@ -1,8 +1,8 @@
+from itertools import cycle, dropwhile, takewhile, chain
 from .polygon import Polygon
 from .point import Point
 from .vector import Vector
-from algo.graham import graham
-from itertools import cycle, dropwhile, takewhile, chain
+from ..algo.graham import graham
 
 
 class Hull(Polygon):

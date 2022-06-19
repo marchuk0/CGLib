@@ -1,6 +1,6 @@
+from itertools import groupby, chain
 from .bin_tree_node import Node
 from .bin_tree import BinTree
-from itertools import groupby, chain
 
 
 class RegionTree(BinTree):

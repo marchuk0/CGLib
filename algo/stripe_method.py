@@ -1,6 +1,6 @@
-from models.point import Point
-from models.graph import Graph
 import functools as f
+from ..models.point import Point
+from ..models.graph import Graph
 
 
 def stripe(g: Graph, dot: Point):

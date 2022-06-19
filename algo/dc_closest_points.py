@@ -1,7 +1,6 @@
-from models.point import Point
-from typing import Tuple, List
 from sys import maxsize
-
+from typing import Tuple, List
+from ..models.point import Point
 
 def closest_points(points: List[Point]):
     Ux, Uy = init_points(points)

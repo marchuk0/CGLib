@@ -1,25 +1,29 @@
-import unittest
-from models.point import Point
-from models.vertex import Vertex
-from models.edge import Edge, OrientedEdge
-from models.graph import Graph, OrientedGraph
-from models.bin_tree_node import Node, QuickhullNode, NodeWithParent
-from models.bin_tree import BinTree, ChainsBinTree, KdTree
-from collections import OrderedDict
-from algo.stripe_method import stripe
-from algo.kd_tree_method import kd_tree
-from algo.jarvis import jarvis
-from algo.graham import graham
-from algo.quickhull import quickhull
-from algo.loci import Loci
-from algo.chain_method import chain_method
-from algo.dc_closest_points import closest_points
-from algo.region_tree_method import region_tree_method
 import math
-import copy
+from copy import deepcopy
+from unittest import TestCase
+from collections import OrderedDict
 
 
-class TestAlgorithms(unittest.TestCase):
+from ..models.point import Point
+from ..models.vertex import Vertex
+from ..models.edge import Edge, OrientedEdge
+from ..models.graph import Graph, OrientedGraph
+from ..models.bin_tree_node import Node, QuickhullNode, NodeWithParent
+from ..models.bin_tree import BinTree, ChainsBinTree, KdTree
+
+
+from ..algo.stripe_method import stripe
+from ..algo.kd_tree_method import kd_tree
+from ..algo.jarvis import jarvis
+from ..algo.graham import graham
+from ..algo.quickhull import quickhull
+from ..algo.loci import Loci
+from ..algo.chain_method import chain_method
+from ..algo.dc_closest_points import closest_points
+from ..algo.region_tree_method import region_tree_method
+
+
+class TestAlgorithms(TestCase):
     """algorithm tests."""
 
     def test_stripe(self):
@@ -512,15 +516,15 @@ class TestAlgorithms(unittest.TestCase):
             v4: {"vin": [e4, e5_balanced], "vout": [], "win": 3, "wout": 0},
         }
 
-        e1_new = copy.deepcopy(e1)
+        e1_new = deepcopy(e1)
         e1_new.weight = 0
-        e2_new = copy.deepcopy(e2)
+        e2_new = deepcopy(e2)
         e2_new.weight = 0
-        e3_new = copy.deepcopy(e3)
+        e3_new = deepcopy(e3)
         e3_new.weight = 0
-        e4_new = copy.deepcopy(e4)
+        e4_new = deepcopy(e4)
         e4_new.weight = 0
-        e5_new = copy.deepcopy(e5)
+        e5_new = deepcopy(e5)
         e5_new.weight = 0
 
         chains = [[e1_new, e4_new], [e1_new, e3_new, e5_new], [e2_new, e5_new]]

@@ -1,8 +1,8 @@
+import math
+from functools import reduce
 from .point import Point
 from .vector import Vector
 from .triangle import Triangle
-from functools import reduce
-import math
 
 
 class Polygon:
