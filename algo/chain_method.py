@@ -1,5 +1,8 @@
-from math import pi as pi
-from models import Point, NodeWithParent, ChainsBinTree, OrientedGraph
+from math import pi
+from models.point import Point
+from models.bin_tree_node import NodeWithParent
+from models.bin_tree import ChainsBinTree
+from models.graph import OrientedGraph
 from collections import OrderedDict
 
 

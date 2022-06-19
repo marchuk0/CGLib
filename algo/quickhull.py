@@ -1,4 +1,7 @@
-from models import Line2D, QuickhullNode, BinTree, Point
+from models.line2d import Line2D
+from models.bin_tree_node import QuickhullNode
+from models.bin_tree import BinTree
+from models.point import Point
 
 
 sort_lr = lambda p: (p.x, -p.y)

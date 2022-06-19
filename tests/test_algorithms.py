@@ -1,19 +1,10 @@
 import unittest
-from models import (
-    Point,
-    Vertex,
-    Graph,
-    Edge,
-    BinTree,
-    ChainsBinTree,
-    KdTree,
-    Node,
-    QuickhullNode,
-    OrientedGraph,
-    OrientedEdge,
-    NodeWithParent,
-    RegionTree
-)
+from models.point import Point
+from models.vertex import Vertex
+from models.edge import Edge, OrientedEdge
+from models.graph import Graph, OrientedGraph
+from models.bin_tree_node import Node, QuickhullNode, NodeWithParent
+from models.bin_tree import BinTree, ChainsBinTree, KdTree
 from collections import OrderedDict
 from algo.stripe_method import stripe
 from algo.kd_tree_method import kd_tree
@@ -281,6 +272,7 @@ class TestAlgorithms(unittest.TestCase):
             ([ordered[0], ordered[1], ordered[2]], False),
             ([ordered[0], ordered[2], ordered[3]], True),
             ([ordered[2], ordered[3], ordered[4]], True),
+            ([ordered[3], ordered[4], ordered[5]], True),
             ([ordered[4], ordered[5], ordered[6]], False),
             ([ordered[3], ordered[4], ordered[6]], True),
             ([ordered[4], ordered[6], ordered[7]], True),
@@ -365,15 +357,18 @@ class TestAlgorithms(unittest.TestCase):
 
     def test_quickhull1(self):
         pts = [Point(3, 4), Point(0, 0), Point(7, 2)]
-        tree = BinTree(QuickhullNode([pts[1], pts[0], pts[2]]))
-        tree.root.left = QuickhullNode([pts[1], pts[0], pts[2]])
-        tree.root.right = QuickhullNode([pts[2], pts[1]])
-        tree.root.left.left = QuickhullNode([pts[1], pts[0]])
-        tree.root.left.right = QuickhullNode([pts[0], pts[2]])
         hull = [pts[1], pts[0], pts[2]]
+        tree = BinTree(QuickhullNode([pts[1], pts[0], pts[2]], hull_piece=hull))
+        tree.root.left = QuickhullNode([pts[1], pts[0], pts[2]], h=pts[0], hull_piece=hull)
+        tree.root.right = QuickhullNode([pts[2], pts[1]], hull_piece=[pts[2], pts[1]])
+        tree.root.left.left = QuickhullNode([pts[1], pts[0]], hull_piece=[pts[1], pts[0]])
+        tree.root.left.right = QuickhullNode([pts[0], pts[2]], hull_piece=[pts[0], pts[2]])
 
         ans = quickhull(pts)
-        _ = next(ans)
+        lp, rp, s1, s2, _ = next(ans)
+        
+        self.assertEqual((pts[1], pts[2]), (lp, rp))
+        self.assertEqual(([pts[1], pts[0], pts[2]], [pts[2], pts[1]]), (s1, s2))
         self.assertEqual(tree, next(ans))
         self.assertEqual(hull, next(ans))
 
@@ -392,8 +387,9 @@ class TestAlgorithms(unittest.TestCase):
             Point(3, 11),
             Point(1, 4),
         ]
+        hull = [pts[0], pts[10], pts[3], pts[8], pts[7], pts[5]]
         tree = BinTree(
-            Node(
+            QuickhullNode(
                 [
                     pts[0],
                     pts[10],
@@ -407,29 +403,41 @@ class TestAlgorithms(unittest.TestCase):
                     pts[6],
                     pts[5],
                     pts[11],
-                ]
+                ],
+                hull_piece=hull
             )
         )
 
-        tree.root.left = QuickhullNode([pts[0], pts[10], pts[9], pts[3], pts[1], pts[8]])
+        tree.root.left = QuickhullNode(
+            [pts[0], pts[10], pts[9], pts[3], pts[1], pts[8]],
+            h=pts[3],
+            hull_piece=[pts[0], pts[10], pts[3], pts[8]]
+        )
         tree.root.right = QuickhullNode(
-            [pts[8], pts[7], pts[2], pts[4], pts[6], pts[5], pts[11], pts[0]]
+            [pts[8], pts[7], pts[2], pts[4], pts[6], pts[5], pts[11], pts[0]],
+            h=pts[7],
+            hull_piece=[pts[8], pts[7], pts[5], pts[0]]
         )
 
-        tree.root.left.left = QuickhullNode([pts[0], pts[10], pts[3]])
-        tree.root.left.right = QuickhullNode([pts[3], pts[8]])
-        tree.root.left.left.left = QuickhullNode([pts[0], pts[10]])
-        tree.root.left.left.right = QuickhullNode([pts[10], pts[3]])
+        tree.root.left.left = QuickhullNode([pts[0], pts[10], pts[3]], h=pts[10], hull_piece=[pts[0], pts[10], pts[3]])
+        tree.root.left.right = QuickhullNode([pts[3], pts[8]], hull_piece=[pts[3], pts[8]])
+        tree.root.left.left.left = QuickhullNode([pts[0], pts[10]], hull_piece=[pts[0], pts[10]])
+        tree.root.left.left.right = QuickhullNode([pts[10], pts[3]], hull_piece=[pts[10], pts[3]])
 
-        tree.root.right.left = QuickhullNode([pts[8], pts[7]])
-        tree.root.right.right = QuickhullNode([pts[7], pts[4], pts[6], pts[5], pts[11], pts[0]])
-        tree.root.right.right.left = QuickhullNode([pts[7], pts[5]])
-        tree.root.right.right.right = QuickhullNode([pts[5], pts[0]])
-
-        hull = [pts[0], pts[10], pts[3], pts[8], pts[7], pts[5]]
+        tree.root.right.left = QuickhullNode([pts[8], pts[7]], hull_piece=[pts[8], pts[7]])
+        tree.root.right.right = QuickhullNode(
+            [pts[7], pts[4], pts[6], pts[5], pts[11], pts[0]],
+            h=pts[5],
+            hull_piece=[pts[7], pts[5], pts[0]]
+        )
+        tree.root.right.right.left = QuickhullNode([pts[7], pts[5]], hull_piece=[pts[7], pts[5]])
+        tree.root.right.right.right = QuickhullNode([pts[5], pts[0]], hull_piece=[pts[5], pts[0]])
 
         ans = quickhull(pts)
-        _ = next(ans)
+        lp, rp, s1, s2, _ = next(ans)
+
+        self.assertEqual((pts[0], pts[8]), (lp, rp))
+        self.assertEqual((tree.root.left.data.points, tree.root.right.data.points), (s1, s2))
         self.assertEqual(tree, next(ans))
         self.assertEqual(hull, next(ans))
 

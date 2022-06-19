@@ -1,4 +1,4 @@
-from math import pi as pi
+from math import pi
 from models.point import Point
 
 

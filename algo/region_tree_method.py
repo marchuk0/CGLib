@@ -1,4 +1,4 @@
-from models import RegionTree
+from models.region_tree import RegionTree
 
 
 def region_tree_method(points, x_range, y_range):

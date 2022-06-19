@@ -1,5 +1,6 @@
-from models import Graph, Point, Triangle
-
+from models.graph import Graph
+from models.point import Point
+from models.triangle import Triangle
 
 class Kirkpatrick:
     def __init__(self, g: Graph):
